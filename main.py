@@ -1,67 +1,41 @@
-import requests
 import os
+import requests
 import sys
-import json
 
-SYMBOL = "1357.T"  # 日経ダブルインバース
+API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
+SYMBOL = "AAPL"
 
-# =========================
-# 環境変数チェック
-# =========================
-ALPHA_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
-
-if not ALPHA_KEY:
-    print("❌ 環境変数 ALPHAVANTAGE_API_KEY が設定されていません")
+if not API_KEY:
+    print("❌ APIキーが設定されていません")
     sys.exit(1)
 
-print("✅ APIキー存在確認 OK")
+url = (
+    "https://www.alphavantage.co/query"
+    f"?function=TIME_SERIES_INTRADAY"
+    f"&symbol={SYMBOL}"
+    f"&interval=5min"
+    f"&apikey={API_KEY}"
+)
 
-# =========================
-# 株価取得
-# =========================
-def get_stock_price():
-    url = "https://www.alphavantage.co/query"
-    params = {
-        "function": "GLOBAL_QUOTE",
-        "symbol": SYMBOL,
-        "apikey": ALPHA_KEY
-    }
+res = requests.get(url)
+print("HTTP status:", res.status_code)
 
-    try:
-        r = requests.get(url, params=params, timeout=10)
-    except Exception as e:
-        raise RuntimeError(f"HTTPリクエスト失敗: {e}")
+data = res.json()
 
-    print("HTTP status:", r.status_code)
-    print("Raw response:", r.text[:500])
+# API制限チェック
+if "Note" in data:
+    print("❌ API制限に達しました")
+    print(data["Note"])
+    sys.exit(1)
 
-    if r.status_code != 200:
-        raise RuntimeError("APIが正常応答しませんでした")
+series = data.get("Time Series (5min)")
 
-    try:
-        data = r.json()
-    except json.JSONDecodeError:
-        raise RuntimeError("JSONとして解析できません（API制限・キー不正の可能性）")
+if not series:
+    print("❌ 株価データが取得できません")
+    print("Raw response:", data)
+    sys.exit(1)
 
-    if "Global Quote" not in data or not data["Global Quote"]:
-        raise RuntimeError("株価データが空です（API制限の可能性）")
+latest_time = sorted(series.keys())[0]
+price = series[latest_time]["4. close"]
 
-    price_str = data["Global Quote"].get("05. price")
-    if not price_str:
-        raise RuntimeError("価格フィールドが存在しません")
-
-    return float(price_str)
-
-# =========================
-# メイン処理
-# =========================
-if __name__ == "__main__":
-    try:
-        price = get_stock_price()
-        print(f"📈 {SYMBOL} 現在値: {price} 円")
-        print("✅ 正常終了")
-
-    except Exception as e:
-        print("❌ エラー発生")
-        print(str(e))
-        sys.exit(1)
+print(f"✅ {SYMBOL} 最新株価:", price)
