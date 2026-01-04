@@ -1,0 +1,28 @@
+name: Stock Notify
+
+# cronで毎時0分に実行
+on:
+  schedule:
+    - cron: '0 * * * *'  # UTC基準なので日本時間+9h注意
+  workflow_dispatch:  # 手動実行用
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3  # リポジトリを取得
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+
+    - name: Run stock script
+      run: |
+        python main.py
