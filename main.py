@@ -65,6 +65,3 @@ if __name__ == "__main__":
         print("❌ エラー発生")
         print(str(e))
         sys.exit(1)
-
-
-print("Current price:", price)
