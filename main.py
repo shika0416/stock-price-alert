@@ -13,7 +13,6 @@ url = (
     "https://www.alphavantage.co/query"
     f"?function=TIME_SERIES_DAILY"
     f"&symbol={SYMBOL}"
-    f"&interval=5min"
     f"&apikey={API_KEY}"
 )
 
@@ -22,20 +21,18 @@ print("HTTP status:", res.status_code)
 
 data = res.json()
 
-# API制限チェック
-if "Note" in data:
-    print("❌ API制限に達しました")
-    print(data["Note"])
+# API制限・エラー表示
+if "Information" in data or "Note" in data:
+    print("❌ APIエラー")
+    print(data)
     sys.exit(1)
 
-series = data.get("Time Series (5min)")
+# ★ 正しい取り出し方
+series = data["Time Series (Daily)"]
 
-if not series:
-    print("❌ 株価データが取得できません")
-    print("Raw response:", data)
-    sys.exit(1)
+# 最新日付を取得
+latest_date = max(series.keys())
+latest = series[latest_date]
+price = latest["4. close"]
 
-latest_time = sorted(series.keys())[0]
-price = series[latest_time]["4. close"]
-
-print(f"✅ {SYMBOL} 最新株価:", price)
+print(f"✅ {SYMBOL} {latest_date} 終値:", price)
