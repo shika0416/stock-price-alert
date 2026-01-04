@@ -3,7 +3,7 @@ name: Stock Price Alert
 on:
   workflow_dispatch:        # 手動実行用
   schedule:
-    - cron: '0 * * * *'     # 毎時0分（UTC）
+    - cron: '0 */3 * * *'     # 毎時0分（UTC）
 
 jobs:
   run-stock-script:
