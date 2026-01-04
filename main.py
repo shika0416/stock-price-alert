@@ -3,7 +3,7 @@ import os
 import sys
 import json
 
-SYMBOL = "1357.T"  # トヨタ
+SYMBOL = "1357.T"  # 日経ダブルインバース
 
 # =========================
 # 環境変数チェック
@@ -65,3 +65,6 @@ if __name__ == "__main__":
         print("❌ エラー発生")
         print(str(e))
         sys.exit(1)
+
+
+print("Current price:", price)
