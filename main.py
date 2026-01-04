@@ -11,7 +11,7 @@ if not API_KEY:
 
 url = (
     "https://www.alphavantage.co/query"
-    f"?function=TIME_SERIES_INTRADAY"
+    f"?function=TIME_SERIES_DAILY"
     f"&symbol={SYMBOL}"
     f"&interval=5min"
     f"&apikey={API_KEY}"
