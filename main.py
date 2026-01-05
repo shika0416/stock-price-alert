@@ -1,45 +1,48 @@
 import os
 import requests
-import sys
 
 API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY")
-SYMBOL = "AAPL"
+SYMBOL = "1357.T"   # 日経225ダブルインバースETF
 
 if not API_KEY:
-    print("❌ APIキーが設定されていません")
-    sys.exit(1)
+    print("❌ 環境変数 ALPHAVANTAGE_API_KEY が設定されていません")
+    exit(1)
 
-url = (
-    "https://www.alphavantage.co/query"
-    f"?function=TIME_SERIES_DAILY"
-    f"&symbol={SYMBOL}"
-    f"&apikey={API_KEY}"
-)
+url = "https://www.alphavantage.co/query"
+params = {
+    "function": "TIME_SERIES_DAILY",
+    "symbol": SYMBOL,
+    "apikey": API_KEY
+}
 
-res = requests.get(url)
-print("HTTP status:", res.status_code)
+response = requests.get(url, params=params)
+print("HTTP status:", response.status_code)
 
-data = res.json()
+data = response.json()
 
-# API制限・エラー表示
-if "Information" in data or "Note" in data:
-    print("❌ APIエラー")
-    print(data)
-    sys.exit(1)
+# エラー対策
+if "Time Series (Daily)" not in data:
+    print("❌ 株価データが取得できません")
+    print("Raw response:", data)
+    exit(1)
 
-# ★ 正しい取り出し方
-series = data["Time Series (Daily)"]
+time_series = data["Time Series (Daily)"]
 
 # 最新日付を取得
-latest_date = max(series.keys())
-latest = series[latest_date]
-price = latest["4. close"]
+latest_date = sorted(time_series.keys(), reverse=True)[0]
 
-close_price = time_series[latest_date]["4. close"]
+latest = time_series[latest_date]
+open_price = latest["1. open"]
+high_price = latest["2. high"]
+low_price = latest["3. low"]
+close_price = latest["4. close"]
+volume = latest["5. volume"]
 
-print(f"✅ AAPL {latest_date} 終値: {close_price}")
-
-print("=== 株価取得結果 ===")
-print(f"銘柄: AAPL")
+print("\n=== 株価取得結果 ===")
+print(f"銘柄: {SYMBOL}")
 print(f"日付: {latest_date}")
+print(f"始値: {open_price}")
+print(f"高値: {high_price}")
+print(f"安値: {low_price}")
 print(f"終値: {close_price}")
+print(f"出来高: {volume}")
