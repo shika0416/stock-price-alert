@@ -35,7 +35,9 @@ latest_date = max(series.keys())
 latest = series[latest_date]
 price = latest["4. close"]
 
-print(f"✅ {SYMBOL} {latest_date} 終値:", price)
+close_price = time_series[latest_date]["4. close"]
+
+print(f"✅ AAPL {latest_date} 終値: {close_price}")
 
 print("=== 株価取得結果 ===")
 print(f"銘柄: AAPL")
