@@ -8,22 +8,29 @@ params = {
     "range": "5d"
 }
 
-res = requests.get(url, params=params)
+headers = {
+    "User-Agent": "Mozilla/5.0 (compatible; stock-bot/1.0)"
+}
+
+res = requests.get(url, params=params, headers=headers)
+
+# デバッグ用（失敗時に原因が分かる）
+print("HTTP status:", res.status_code)
+print("Raw text (first 200 chars):", res.text[:200])
+
 data = res.json()
 
 try:
     result = data["chart"]["result"][0]
-    timestamps = result["timestamp"]
     indicators = result["indicators"]["quote"][0]
 
-    latest_index = -1
-    close_price = indicators["close"][latest_index]
+    close_price = indicators["close"][-1]
 
     print("=== 株価取得結果 ===")
     print(f"銘柄: {SYMBOL}")
     print(f"終値: {close_price}")
 
-except Exception as e:
-    print("❌ 株価取得に失敗")
-    print(data)
-    raise e
+except Exception:
+    print("❌ 株価データが取得できません")
+    print("Raw response:", data)
+    raise
