@@ -36,3 +36,8 @@ latest = series[latest_date]
 price = latest["4. close"]
 
 print(f"✅ {SYMBOL} {latest_date} 終値:", price)
+
+print("=== 株価取得結果 ===")
+print(f"銘柄: AAPL")
+print(f"日付: {latest_date}")
+print(f"終値: {close_price}")
