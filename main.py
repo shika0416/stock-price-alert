@@ -46,6 +46,12 @@ MAIL_USER = os.getenv("MAIL_USER")
 MAIL_PASS = os.getenv("MAIL_PASS")
 MAIL_TO = os.getenv("MAIL_TO")
 
+body = f"""株価通知です。
+
+銘柄: {symbol}
+終値: {close_price} 円
+"""
+
 msg = MIMEText(body)
 msg["Subject"] = subject
 msg["From"] = MAIL_USER
