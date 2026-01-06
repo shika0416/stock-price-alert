@@ -34,5 +34,6 @@ jobs:
             MAIL_PORT: ${{ secrets.MAIL_PORT }}
             MAIL_USER: ${{ secrets.MAIL_USER }}
             MAIL_PASS: ${{ secrets.MAIL_PASS }}
+            MAIL_TO: ${{ secrets.MAIL_TO }}
         run: |
           python main.py
