@@ -53,7 +53,6 @@ body = f"""株価通知です。
 """
 
 msg = MIMEText(body)
-msg["Subject"] = subject
 msg["From"] = MAIL_USER
 msg["To"] = MAIL_TO
 msg["Subject"] = f"【株価通知】{SYMBOL} 終値 {close_price}円"
