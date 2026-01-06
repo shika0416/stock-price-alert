@@ -29,6 +29,10 @@ jobs:
       # ④ Python を実行（← ここが最重要）
       - name: Run stock script
         env:
-          ALPHAVANTAGE_API_KEY: ${{ secrets.ALPHAVANTAGE_API_KEY }}
+            ALPHAVANTAGE_API_KEY: ${{ secrets.ALPHAVANTAGE_API_KEY }}
+            MAIL_HOST: ${{ secrets.MAIL_HOST }}
+            MAIL_PORT: ${{ secrets.MAIL_PORT }}
+            MAIL_USER: ${{ secrets.MAIL_USER }}
+            MAIL_PASS: ${{ secrets.MAIL_PASS }}
         run: |
           python main.py
