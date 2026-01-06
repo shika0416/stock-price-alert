@@ -3,8 +3,9 @@ name: Stock Price Alert
 on:
   workflow_dispatch:        # 手動実行用
   schedule:
-    - cron: '1 0 * * 1-5'     # 毎時0分（UTC）
-    - cron: '5 0 * * 1-5'     # 毎時0分（UTC）
+    - cron: '1 0 * * 1-5'     # 平日9時1分（UTC）
+    - cron: '5 0 * * 1-5'     # 平日9時5分（UTC）
+    - cron: '15 0 * * 1-5'    # 平日9時15分(UTC）
 
 jobs:
   run-stock-script:
