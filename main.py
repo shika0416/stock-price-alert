@@ -48,7 +48,7 @@ MAIL_TO = os.getenv("MAIL_TO")
 
 body = f"""株価通知です。
 
-銘柄: {symbol}
+銘柄: {SYMBOL}
 終値: {close_price} 円
 """
 
