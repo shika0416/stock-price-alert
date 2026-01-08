@@ -1,5 +1,14 @@
 import requests
 
+import holidays, sys
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+now = datetime.now(ZoneInfo("Asia/Tokyo"))
+if now.date() in holidays.Japan():
+    sys.exit(0)
+
+
 
 SYMBOL = "1357.T"
 
