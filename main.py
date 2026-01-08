@@ -1,5 +1,16 @@
 import requests
 
+
+from datetime import datetime, timezone, timedelta
+
+JST = timezone(timedelta(hours=9))
+now = datetime.now(JST)
+
+
+
+
+
+
 SYMBOL = "1357.T"
 
 url = f"https://query1.finance.yahoo.com/v8/finance/chart/{SYMBOL}"
