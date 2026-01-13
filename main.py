@@ -40,6 +40,8 @@ import smtplib
 from email.mime.text import MIMEText
 import os
 
+
+
 SMTP_SERVER = os.getenv("MAIL_HOST")
 SMTP_PORT = int(os.getenv("MAIL_PORT"))
 MAIL_USER = os.getenv("MAIL_USER")
